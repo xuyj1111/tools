@@ -1,30 +1,60 @@
-plugins {
-    id 'org.springframework.boot' version '2.6.1'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'java'
-}
-
-group = 'xu'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+buildscript {
+    dependencies {
+        //声明的依赖,可以声明的资源包括依赖项、第三方插件、maven仓库地址等
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${SPRING_BOOT_VERSION}"
     }
 }
 
-repositories {
-    mavenCentral()
+plugins {
+    id 'io.franzbecker.gradle-lombok' version '1.8'
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//所有项目的配置，包括tools项目
+allprojects {
+    group = 'xu.tools'
+    repositories {
+        mavenLocal()
+        maven {
+            url "http://maven.aliyun.com/nexus/content/groups/public/"
+        }
+    }
 }
 
-test {
-    useJUnitPlatform()
+//所有子项目的设置
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'io.franzbecker.gradle-lombok'
+
+    // 指定上传的路径
+    def localMavenRepo = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+    // 上传Task
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: localMavenRepo)
+            }
+        }
+    }
+
+    dependencies {
+        compile 'org.springframework.boot:spring-boot-starter-web'
+        testCompile "org.springframework.boot:spring-boot-starter-test"
+        compile 'org.projectlombok:lombok'
+        compile 'org.junit.jupiter:junit-jupiter:5.4.2'
+    }
+
+    clean {
+        delete 'out'
+    }
+
+    compileJava {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    bootJar.enabled = false
+    jar.enabled = true
 }
