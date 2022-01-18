@@ -1,4 +1,4 @@
-package xu.tools.toolsio;
+package xu.tools.io;
 
 import java.io.IOException;
 import java.io.InputStream;

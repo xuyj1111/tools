@@ -1,4 +1,4 @@
-package xu.tools.toolsio;
+package xu.tools.io;
 
 public class MainClass {
 

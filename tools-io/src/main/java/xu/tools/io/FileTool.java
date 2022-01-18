@@ -1,4 +1,4 @@
-package xu.tools.toolsio;
+package xu.tools.io;
 
 import java.io.File;
 import java.io.FileReader;
