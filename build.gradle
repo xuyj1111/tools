@@ -28,8 +28,9 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'io.franzbecker.gradle-lombok'
 
-    // 指定上传的路径
-    def localMavenRepo = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+    // 指定上传的路径，默认maven本地仓库为以下地址
+//    def localMavenRepo = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+    def localMavenRepo = "${LOCAL_MAVEN}"
     // 上传Task
     uploadArchives {
         repositories {
